@@ -7,8 +7,8 @@ module.exports = function(app) {
   /**
    * Tasks
    * Create, read, update, and delete tasks
-Filter tasks by status, priority, and other attributes
-Support for pagination to handle large sets of tasks
+      Filter tasks by status, priority, and other attributes
+      Support for pagination to handle large sets of tasks
    */
   /**
    * Create a new task
