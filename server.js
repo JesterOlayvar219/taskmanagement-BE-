@@ -3,9 +3,8 @@ const mongoose = require("mongoose");
 const express = require("express");
 const app = express();
 
-app.get("/", function (req, res) {
-  res.send("Hello World");
-});
+// routes
+require('./routes')(app);
 
 mongoose
   .connect("mongodb://localhost:27017/taskdb", {
