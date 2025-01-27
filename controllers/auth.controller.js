@@ -26,6 +26,7 @@ exports.signup = async (req, res) => {
       await user.save();
     }
 
+    res.status(201).json(savedUser);
     res.send({ message: "User was registered successfully!" });
   } catch (error) {
     res.status(500).send({ message: error.message });
@@ -37,6 +38,8 @@ exports.signin = async (req, res) => {
     const user = await User.findOne({
       username: req.body.username,
     }).populate("roles", "-__v");
+
+    console.log("userRole", user.roles);
 
     if (!user) {
       return res.status(404).send({ message: "User Not found." });
@@ -68,6 +71,7 @@ exports.signin = async (req, res) => {
       username: user.username,
       email: user.email,
       roles: authorities,
+      accessToken: token,
     });
   } catch (err) {
     res.status(500).send({ message: err.message });
