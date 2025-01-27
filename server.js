@@ -1,3 +1,5 @@
+//https://www.bezkoder.com/node-js-mongodb-auth-jwt/
+
 const express = require("express");
 const cors = require("cors");
 const cookieSession = require("cookie-session");
@@ -5,28 +7,30 @@ const cookieSession = require("cookie-session");
 const app = express();
 
 var corsOptions = {
-  origin: "http://localhost:8081",
+  origin: "http://localhost:3000",
 };
 
 app.use(cors(corsOptions));
 
+// parse requests of content-type - application/json
 app.use(express.json());
+// parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
 app.use(
   cookieSession({
     name: "hitman-session",
-    keys: ["COOKIE_SECRET"],
+    keys: ["COOKIE_SECRET"], // should use as secret environment variable
     httpOnly: true,
   })
 );
 
-const taskRouter = require("./routes/tasks");
+// const taskRouter = require("./routes/tasks");
+// app.use("/api", taskRouter);
 
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to dragon application" });
 });
-app.use("/api", taskRouter);
 
 const db = require("./models");
 const dbConfig = require("./config/db.config");
@@ -69,6 +73,12 @@ function initial() {
     .catch((err) => console.log("Error counting documents:", err));
 }
 
+// routes
+require("./routes/auth.routes")(app);
+require("./routes/user.routes")(app);
+require("./routes/task.routes")(app);
+
+// set port, listen for requests
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`server is running on port ${PORT}.`);
